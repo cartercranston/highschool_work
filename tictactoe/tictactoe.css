@@ -1,0 +1,111 @@
+/*
+#e8d7ff - light purple
+#c9c19f - tan
+#5c374c - purply brown
+#dd6031 - orange
+#b0fe76 - light green
+#7b1e7a - deep purple
+*/
+@import url('https://fonts.googleapis.com/css2?family=Kufam&display=swap');
+
+#main {
+    position:relative;
+    margin-left: auto;
+    margin-right: auto;
+    height:585px;
+    width:595px;
+    background-color:#5c374c;
+}
+body {
+    background-color:#e8d7ff;
+	font-family:'Kufam', cursive;
+}
+#title-text {
+	color:#dd6031;
+	font-size:3.5em;
+}
+#controls {
+	position:fixed;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+}
+#newbutton {
+	position:absolute;
+	top:15px;
+	right:15px;
+	height:40px;
+	width:100px;
+	background-color:#7b1e7a;
+	color:#d1c2e6;
+}
+
+.text {
+    text-align:center;
+	color:#ff733b;
+}
+.box {
+    height: 175px;
+    width: 175px;
+    background-color:#c9c19f;
+    display:inline-block;
+    margin:10px;
+    vertical-align: top;
+    text-align:center;
+    line-height: 175px;
+    font-size: 100px;
+    font-family: Lato, Roboto, sans-serif;
+}
+.Xbox {
+	color:#7b1e7a;
+}
+.Obox {
+	color:#b0fe76;
+}
+h1.text {
+	font-size:3em;
+}
+p.text {
+	font-size:2em;
+}
+.hidden {
+  display:none;
+}
+
+.unhidden {
+  display:block;
+}
+#lightbox {
+  background-color:rgba(0,0,0,0.2);
+  position:fixed;
+  top:0px;
+  left:0px;
+  width:100%;
+  height:100%;
+}
+#x {
+  position:absolute;
+  top:10px;
+  right:10px;
+  height:30px;
+  width:30px;
+  z-index:2;
+}
+#positionMessage{
+	position:absolute;
+	top:110px;
+	left:0px;
+	width:100%;
+}
+
+#boundaryMessage{
+	position:relative;
+	margin-left:auto;
+	margin-right:auto;
+	width:600px;
+	height:200px;
+	background-color:rgba(76,46,63,0.95);
+	padding:30px;
+	border:thick solid #7b1e7a;
+}
