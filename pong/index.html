@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Pong</title>
+    <link rel="stylesheet" href="pong.css">  
+    <link rel='icon' href='favicon.ico' type='image/x-icon'/>
+  </head>
+  
+  <body>
+      <div id="controlpanel">
+        <div onclick="startGame()" class="controls">Start Game</div>
+        <div onclick="stopGame()" class="controls">Stop Game</div>
+        <div onclick="pauseGame()" class="controls">Pause Game</div>
+        <div onclick="resumeGame()" class="controls">Resume Game</div>
+      </div>
+      
+      <div id="header">
+        <h1 id="title">Pong</h1>
+        <h2 id="left">Score 1: <span id="score1">0</span></h2>
+        <h2 id="right">Score 2: <span id="score2">0</span></h2>
+      </div>
+      
+      <div id="gameboard">
+        <div id="paddle1" class="paddle"></div>
+          
+        <div id="ball"></div>
+          
+        <div id="paddle2" class="paddle"></div>
+      </div>
+      
+      <div id="lightbox" class="hidden"></div>
+	  
+	  <div id="positionMessage">
+	    <div id="boundaryMessage" class="hidden">
+		  <img id="x" src="x.png" alt="close" onclick="closeBox()">
+		  <h1 class="text" id="message">&nbsp;</h1>
+		  <p class="text" id="message2"></p>
+		</div>
+	  </div>
+      
+    <script src="pong.js"></script>
+  </body>
+  
+</html>
