@@ -1,0 +1,74 @@
+#gameboard {
+	border: 1px solid black;
+	display:grid;
+	grid-template-columns:120px 120px 120px 120px 120px;
+	grid-template-rows:120px 120px 120px 120px 120px;
+	justify-content:center;
+	width:600px;
+	height:600px;
+	
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#gameboard div {
+	background-color: #000000;
+	/*background-repeat: no-repeat;
+	background-size:cover;*/
+}
+
+.simon {
+	background-image:url("images/Simon.png");
+}
+.meteor {
+	background-image:url("images/Meteor.png");
+}
+.star {
+	background-image:url("images/Star.png");
+}
+.flag {
+	background-image:url("images/Flag.png");
+}
+.forcefieldup {
+	background-image:url("images/Forcefieldup.png");
+}
+.forcefieldside {
+	background-image:url("images/Forcefieldside.png");
+}
+.enemyup {
+	background-image:url("images/Enemyup.png");
+}
+.enemyright {
+	background-image:url("images/Enemyright.png");
+}
+.enemydown {
+	background-image:url("images/Enemydown.png");
+}
+.enemyleft {
+	background-image:url("images/Enemyleft.png");
+}
+.horseup {
+	background-image:url("images/Horseup.png");
+}
+.horseright {
+	background-image:url("images/Horseright.png");
+}
+.horsedown {
+	background-image:url("images/Horsedown.png");
+}
+.horseleft {
+	background-image:url("images/Horseleft.png");
+}
+.horseandriderup {
+	background-image:url("images/Horseandriderup.png");
+}
+.horseandriderright {
+	background-image:url("images/Horseandriderright.png");
+}
+.horseandriderdown {
+	background-image:url("images/Horseandriderdown.png");
+}
+.horseandriderleft {
+background-image:url("images/Horseandriderleft.png");
+}
+
