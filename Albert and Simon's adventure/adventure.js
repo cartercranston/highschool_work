@@ -228,7 +228,7 @@ function animateEnemy(boxes,index,direction,animation) {
 }//animate enemy
 
 //gets called three times at the start of the program, and then every few seconds later. Only works if the source ship's torpedo has crashed or gone off the screen. Moves the torpedo to a space adjacent to the ship, and animate it perpendicular to the ship
-function fireTorpedo (torpedo, position) {
+/*function fireTorpedo (torpedo, position) {
 	
 	//Only works if the source ship's torpedo has crashed or gone off the screen.
 	if( || ) {
@@ -239,7 +239,7 @@ function fireTorpedo (torpedo, position) {
 		
 	}
 	//gets called three times at the start of the program, and then every few seconds later.
-}//fireTorpedo
+}//fireTorpedo*/
 
 //try to move sphere
 function tryToMove (direction) {
