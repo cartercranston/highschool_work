@@ -57,7 +57,7 @@ const levels = [
 const gridBoxes = document.querySelectorAll("#gameboard div");
 const width = 10;
 const noPassObstacles = ["obstacle1","forcefieldup","forcefieldside","planet","planet2"];
-var currentLevel = 1;//starting level
+var currentLevel = 0;//starting level
 var currentLocationOfSphere = 0;
 var animation1;//allow 3 enemies per level
 var animation2;
