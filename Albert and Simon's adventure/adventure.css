@@ -1,8 +1,12 @@
+body {
+	background-color: black;
+}
+
 #gameboard {
 	border: 1px solid black;
 	display:grid;
-	grid-template-columns:120px 120px 120px 120px 120px;
-	grid-template-rows:120px 120px 120px 120px 120px;
+	grid-template-columns:60px 60px 60px 60px 60px 60px 60px 60px 60px 60px;
+	grid-template-rows:60px 60px 60px 60px 60px 60px 60px 60px 60px 60px;
 	justify-content:center;
 	width:600px;
 	height:600px;
@@ -17,58 +21,83 @@
 	background-size:cover;*/
 }
 
-.simon {
-	background-image:url("images/Simon.png");
+.planet {
+	background-image:url("images/planet.png");
 }
-.meteor {
-	background-image:url("images/Meteor.png");
 }
-.star {
-	background-image:url("images/Star.png");
+.planet2 {
+	background-image:url("images/obstacle1.png");
+}
+.obstacle1 {
+	background-image:url("images/obstacle1.png");
 }
 .flag {
-	background-image:url("images/Flag.png");
+	background-image:url("images/cube.png");
 }
 .forcefieldup {
-	background-image:url("images/Forcefieldup.png");
+	background-image:url("images/forcefieldup.png");
 }
 .forcefieldside {
-	background-image:url("images/Forcefieldside.png");
+	background-image:url("images/forcefieldside.png");
 }
 .enemyup {
-	background-image:url("images/Enemyup.png");
+	background-image:url("images/enemyup.png");
 }
 .enemyright {
-	background-image:url("images/Enemyright.png");
+	background-image:url("images/enemyright.png");
 }
 .enemydown {
-	background-image:url("images/Enemydown.png");
+	background-image:url("images/enemydown.png");
 }
 .enemyleft {
-	background-image:url("images/Enemyleft.png");
+	background-image:url("images/enemyleft.png");
 }
-.horseup {
-	background-image:url("images/Horseup.png");
+.sphereup {
+	background-image:url("images/sphereup.png");
 }
-.horseright {
-	background-image:url("images/Horseright.png");
+.sphereright {
+	background-image:url("images/sphereright.png");
 }
-.horsedown {
-	background-image:url("images/Horsedown.png");
+.spheredown {
+	background-image:url("images/spheredown.png");
 }
-.horseleft {
-	background-image:url("images/Horseleft.png");
+.sphereleft {
+	background-image:url("images/sphereleft.png");
 }
-.horseandriderup {
-	background-image:url("images/Horseandriderup.png");
+.flagandsphere {
+	background-image:url("images/cubeandsphere.png");
 }
-.horseandriderright {
-	background-image:url("images/Horseandriderright.png");
-}
-.horseandriderdown {
-	background-image:url("images/Horseandriderdown.png");
-}
-.horseandriderleft {
-background-image:url("images/Horseandriderleft.png");
+.torpedo {
+	background-image:url("images/Star.png");
 }
 
+.message {
+    display:none;
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    background-color: rgba(0,0,0,0.8);
+    color:white;
+    font-family: Verdana, sans-serif;
+    font-size: 8em;
+    vertical-align: top;
+    text-align: center;
+    line-height:100vh;
+}
+
+h1 {
+	text-align:center;
+	color: pink;
+}
+a {
+	font-size:2em;
+}
+div {
+	text-align:center;
+}
+img {
+	width:150px;
+	padding-left:50px;
+}
