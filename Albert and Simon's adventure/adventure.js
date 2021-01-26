@@ -281,13 +281,13 @@ function animateTorpedo (direction, position, torpedo) {
 	position += speed;
 	
 	//check if torpedo has crashed
-	if(torpedo has crashed){
+	/*if(torpedo has crashed){
 		torpedoExists[torpedo] = false;
 	} else {
 		
 		//tell other torpedos where this one is
 		torpedoPositions[torpedo] = position;
-	}//else
+	}//else*/
 	
 	//set timeout to animate again
 	torpedos[torpedo] = setTimeout(function() {
