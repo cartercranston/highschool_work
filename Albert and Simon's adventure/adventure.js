@@ -1,8 +1,6 @@
 /*TODO
- * Levels
- * Phasers
- * Smarter enemies
- * Assimilation
+ * Photon torpedos
+ * Home Screen
 */
 const levels = [
 	//level 0
@@ -30,43 +28,43 @@ const levels = [
 	 "forcefieldside","forcefieldside","forcefieldside","forcefieldside","forcefieldside","obstacle1","obstacle1","forcefieldside","forcefieldside","forcefieldside"],
 	
 	//level 2
-	["","","","","","","","","","",
-	 "","","","","","","","","","",
-     "","","","","","","","","","",
-	 "","","","","","","","","","",
-     "","","","","","","","","","",
-     "","","","","","","","","","",
-     "","","","","","","","","","",
-     "","","","","","","","","","",
-     "","","","","","","","","","",
-	 "","","","","","","","","",""],
+	["","forcefieldup","","","","","","","","",
+	 "","forcefieldup","","orbit","","","","","","",
+     "","forcefieldup","orbit","planet","orbit","","","","","",
+	 "","forcefieldup","","forcefieldside","forcefieldside","","","","","",
+     "","forcefieldup","obstacle1","","","","track3","","","",
+     "","obstacle1","","track2","","","track3","","","",
+     "","obstacle1","obstacle1","track2","","","track3","","","",
+     "forcefieldup","flagandsphere","","track2","","","track3","","","",
+     "","","","track2","","","","","","",
+	 "","obstacle1","","track1","track1","track1","track1","","",""],
 	 
 	 //level 3
 	["","","","","","","","","","",
-	 "","","","","","","","","","",
-     "","","","","","","","","","",
-	 "","","","","","","","","","",
-     "","","","","","","","","","",
-     "","","","","","","","","","",
-     "","","","","","","","","","",
-     "","","","","","","","","","",
-     "","","","","","","","","","",
-	 "","","","","","","","","",""]
+	 "track1","track1","track1","track1","","","","","","track3",
+     "","obstacle1","","forcefieldup","obstacle1","","forcefieldup","track2","","track3",
+	 "","obstacle1","orbit","obstacle1","","","forcefieldup","track2","","track3",
+     "","obstacle1","planet","forcefieldup","","","forcefieldup","track2","","track3",
+     "","obstacle1","orbit","obstacle1","","","forcefieldup","","","",
+     "","forcefieldup","","forcefieldup","","","forcefieldup","","","",
+     "","forcefieldup","","","","obstacle1","","","","",
+     "","forcefieldside","forcefieldside","obstacle1","forcefieldside","forcefieldside","obstacle1","","","",
+	 "","","","","flagandsphere","","","","",""]
  ];
  
 const gridBoxes = document.querySelectorAll("#gameboard div");
 const width = 10;
-const noPassObstacles = ["obstacle1","forcefieldup","forcefieldside","planet","planet2"];
+const noPassObstacles = ["obstacle1","forcefieldup","forcefieldside","planet","planet2","planet3","planet4"];
 var currentLevel = 0;//starting level
 var currentLocationOfSphere = 0;
-var animation1;//allow 3 enemies per level
-var animation2;
-var animation3;
-var torpedo1;//allows each ship to have a photon torpedo
-var torpedo2;
-var torpedo3;
+var animations = [];//allow 3 enemies per level
+var torpedos = [];//allows each ship to have a photon torpedo
+var fireTorpedos = [];//allows each ship to fire repeatedly
+var torpedoPositions = [];//stores all torpedo positions
+var torpedoExists = [false,false,false];
 var i;
 var flagLocation = 0;
+var planetLocation = 0;
 var planetAssimilated = false;
 var gameWinnable = false;
 
@@ -106,8 +104,8 @@ document.addEventListener("keydown",function(e) {
 //loadLevels 0 - maxLevel
 function loadLevel () {
 	let levelMap = levels[currentLevel];
+	let enemy0Boxes;
 	let enemy1Boxes;
-	let enemy2Boxes;
 	let enemy3Boxes;
 	planetAssimilated = false;
     gameWinnable = false;
@@ -115,28 +113,23 @@ function loadLevel () {
 	//load board
 	for(i = 0; i < gridBoxes.length; i ++) {
 		gridBoxes[i].className = levelMap[i];
-		if(levelMap[i].includes("sphere")) {
+		if(levelMap[i].includes("flagandsphere")) {
 			currentLocationOfSphere = i;
-		}//if
-	}//for
-	
-    //find flag
-    for(i = 0; i < width * width; i ++) {
-        if(gridBoxes[i].className.includes("flag")) {
             flagLocation = i;
-            break;
-        }//if
-    }//for
+		} else if(levelMap[i].includes("planet")) {
+			planetLocation = i;
+		}//else if
+	}//for
     
-	enemy1Boxes = document.querySelectorAll(".track1");
-	enemy2Boxes = document.querySelectorAll(".track2");
+	enemy0Boxes = document.querySelectorAll(".track1");
+	enemy1Boxes = document.querySelectorAll(".track2");
 	enemy3Boxes = document.querySelectorAll(".track3");
-	animateEnemy(enemy1Boxes, 0, "right", animation1);
-	animateEnemy(enemy2Boxes, 0, "down", animation2);
-	animateEnemy(enemy3Boxes, 0, "down", animation3);
-	fireTorpedo(torpedo1);
-	fireTorpedo(torpedo2);
-	fireTorpedo(torpedo3);
+	animateEnemy(enemy0Boxes, 0, "right", 0);
+	animateEnemy(enemy1Boxes, 0, "down", 1);
+	animateEnemy(enemy3Boxes, 0, "down", 2);
+	fireTorpedo(6, "right", 0);
+	fireTorpedo(11, "down", 1);
+	fireTorpedo(25, "down", 2);
 }//loadLevel
 
 //animate enemy left to right (could add up and down to this)
@@ -222,25 +215,85 @@ function animateEnemy(boxes,index,direction,animation) {
 		}//else
 	}//else if
 	
-	animation = setTimeout(function() {
+	animations[animation] = setTimeout(function() {
 		animateEnemy(boxes, index, direction, animation);
 	}, 750);
 }//animate enemy
 
 //gets called three times at the start of the program, and then every few seconds later. Only works if the source ship's torpedo has crashed or gone off the screen. Moves the torpedo to a space adjacent to the ship, and animate it perpendicular to the ship
-function fireTorpedo (torpedo, position) {
-	/*
+function fireTorpedo (position, shipDirection, torpedo) {
+	
 	//Only works if the source ship's torpedo has crashed or gone off the screen.
-	if( || ) {
+	if(!torpedoExists[torpedo]) {
 		
 		//Moves the torpedo to a space adjacent to the ship, and animates it perpendicular to the ship
+		if (shipDirection == "up" || shipDirection == "down") {
+			direction = (Math.random() < 0.5) ? "left":"right";
+		} else {
+			direction = (Math.random() < 0.5) ? "up":"down";
+		}//else
 		
+		//animateTorpedo(direction, position, torpedo)
+		torpedoExists[torpedo] = true;
 		
-		
-	}
-    */
+	}//if
 	//gets called three times at the start of the program, and then every few seconds later.
+	fireTorpedos[torpedo] = setTimeout(function() {
+		fireTorpedo(torpedo);
+	}, 4000);
 }//fireTorpedo
+
+//
+function animateTorpedo (direction, position, torpedo) {
+	
+	//when position is increased by speed, it can go in any of the four directions
+	let speed;
+	switch (direction) {
+		case "right": speed = 1;
+		break;
+		case "left": speed = -1;
+		break;
+		case "up": speed = -10;
+		break;
+		case "down": speed = 10;
+		break;
+	}//switch
+		
+	console.log(position, gridBoxes[position]);
+		
+	//if the torpedo hits you, you lose
+	if(gridBoxes[position].className.includes("sphere")) {
+		document.getElementById("lose").style.display = "block";
+        return;
+	}//if
+	
+	//update image
+	gridBoxes[position].classList.add("torpedo");
+		
+	//remove other images
+	for(i = 0; i < gridBoxes.length; i ++) {
+		if(!torpedoPositions.includes(i)) {
+			gridBoxes[i].classList.remove("torpedo");
+		}//if
+	}//for*/
+	
+	//moving
+	position += speed;
+	
+	//check if torpedo has crashed
+	if(torpedo has crashed){
+		torpedoExists[torpedo] = false;
+	} else {
+		
+		//tell other torpedos where this one is
+		torpedoPositions[torpedo] = position;
+	}//else
+	
+	//set timeout to animate again
+	torpedos[torpedo] = setTimeout(function() {
+		animateTorpedo(direction, position, torpedo);
+	}, 1000);
+}//animateTorpedo
 
 //try to move sphere
 function tryToMove (direction) {
@@ -273,23 +326,7 @@ function tryToMove (direction) {
 	
 	//if the space is adjacent to a planet, start assimilation
     if (nextClass == "orbit") {
-        if(planetAssimilated == true) {
-            //remove forcefields
-            let forcefields = document.querySelectorAll(".forcefieldup, .forcefieldside");
-            for(i = 0; i < forcefields.length; i ++) {
-                forcefields[i].className = "";
-            }//for
-            
-            //change planet appearance
-			try {
-				document.querySelector(".planet2").className = "planet";
-			} catch(err){}
-			
-            gameWinnable = true;
-        } else if (planetAssimilated != "underway") {
-            assimilatePlanet();
-        }//else if
-        
+		orbit();
     }//if
     
     //if there is an orbit in the old location, keep it
@@ -333,15 +370,35 @@ function tryToMove (direction) {
 //move up a level when at flag
 function levelUp() {
     document.getElementById("levelup").style.display = "block";
-    clearTimeout(animation1);
-	clearTimeout(animation2);
-	clearTimeout(animation3);
+    clearTimeout(animations[0]);
+	clearTimeout(animations[1]);
+	clearTimeout(animations[2]);
     setTimeout(function(){
         document.getElementById("levelup").style.display = "none";
         currentLevel ++;
-        loadLevel();
+        if (currentLevel < levels.length) {
+            loadLevel();
+        } else {
+			document.getElementById("gamewon").style.display = "block";
+		}//else
     }, 1000);//setTimeout
 }//levelUp
+
+//when sphere is next to planet, can beam drones up or down
+function orbit() {
+	if(planetAssimilated == true) {
+		//remove forcefields
+		let forcefields = document.querySelectorAll(".forcefieldup, .forcefieldside");
+		for(i = 0; i < forcefields.length; i ++) {
+			forcefields[i].className = "";
+		}//for
+		
+		gameWinnable = true;
+	} else if (planetAssimilated != "underway") {
+		assimilatePlanet();
+    }//else if
+}//orbit
+
 
 //changes planet appearance, waits 4 seconds, then changes it again
 function assimilatePlanet () {
@@ -349,17 +406,28 @@ function assimilatePlanet () {
 	
     //change planet appearance
     setTimeout(function(){
-        document.querySelector(".planet").className = "planet2";
+        gridBoxes[planetLocation].className = "planet4";
         planetAssimilated = true;
-    }, 6000);
+		if(gridBoxes[currentLocationOfSphere].className.includes("orbit")) {
+			orbit();
+		}
+    }, 4000);
 	
 	//make explosions for 4 seconds
-	for(i = 0; i < 6; i ++) {
+	for(i = 0; i < 8; i ++) {
 		setTimeout(function() {
-			console.log("boom");
-		}, 1000 * i);
+            switch(gridBoxes[planetLocation].className) {
+                case "planet": 
+                    gridBoxes[planetLocation].className = "planet2";
+                    break;
+                case "planet2": 
+                    gridBoxes[planetLocation].className = "planet3";
+                    break;
+                case "planet3": 
+                    gridBoxes[planetLocation].className = "planet";
+            }
+		}, 500 * i);
 	}//for
-	
 }//assimilatePlanet
 
 

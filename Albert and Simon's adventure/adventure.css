@@ -2,17 +2,20 @@ body {
 	background-color: black;
 }
 
-#gameboard {
+.gameboard {
 	border: 1px solid black;
-	display:grid;
-	grid-template-columns:60px 60px 60px 60px 60px 60px 60px 60px 60px 60px;
-	grid-template-rows:60px 60px 60px 60px 60px 60px 60px 60px 60px 60px;
 	justify-content:center;
 	width:600px;
 	height:600px;
-	
 	margin-left:auto;
 	margin-right:auto;
+}
+
+#gameboard {
+	position:absolute;
+	display:grid;
+	grid-template-columns:60px 60px 60px 60px 60px 60px 60px 60px 60px 60px;
+	grid-template-rows:60px 60px 60px 60px 60px 60px 60px 60px 60px 60px;
 }
 
 #gameboard div {
@@ -21,12 +24,22 @@ body {
 	background-size:cover;*/
 }
 
+#backdrop {
+	position:absolute;
+	background-image:url("images/Space.jpg");
+}
+
 .planet {
 	background-image:url("images/planet.png");
 }
-}
 .planet2 {
-	background-image:url("images/obstacle1.png");
+	background-image:url("images/planet2.png");
+}
+.planet3 {
+    background-image:url("images/planet3.png");
+}
+.planet4 {
+    background-image:url("images/planet.png");
 }
 .obstacle1 {
 	background-image:url("images/obstacle1.png");
@@ -68,7 +81,7 @@ body {
 	background-image:url("images/cubeandsphere.png");
 }
 .torpedo {
-	background-image:url("images/Star.png");
+	background-image:url("images/torpedo.png");
 }
 
 .message {
@@ -98,6 +111,8 @@ div {
 	text-align:center;
 }
 img {
-	width:150px;
 	padding-left:50px;
+}
+p {
+	color:green;
 }
