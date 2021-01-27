@@ -472,7 +472,7 @@ function tryToMove (direction) {
 
 //move up a level when at flag
 function levelUp() {
-    if (currentLevel < levels.length) {
+    if (currentLevel < levels.length - 1) {
         document.getElementById("levelup").style.display = "block";
         clearTimeout(animations[0]);
         clearTimeout(animations[1]);
@@ -483,7 +483,7 @@ function levelUp() {
             loadLevel();
         }, 1000);//setTimeout
     } else {
-            window.location.href = "end.html";
+        window.location.href = "end.html";
 	}//else
 }//levelUp
 
