@@ -1,6 +1,8 @@
-/*
-TODO
- * Charging animation
+/*BUGS
+ * In chargingAnimation, enemyImages[ship] reverts back to enemyright from charge1enemyright when the first setTimeout runs
+ * In chargingAnimation, the second setTimeout doesn't run when it's supposed to
+ * line 436 keeps throwing a too much recursion error
+ * Torpedos don't appear where they're supposed to
 */
 /*Note:
 Whenever adding new obstacle types, animateTorpedo must be changed
@@ -72,6 +74,7 @@ var gameWinnable = false;//becomes true when you return to an assimilated planet
 var enemyIndexes = [];//stores the current location of each enemy as an index of its boxes array
 var enemyBoxes = [[],[],[]];//2d array storing the boxes for the track of each enemy
 var enemyBoxesPositions = [[],[],[]];//as enemyBoxes, but stores the position instead of the div tag itself
+var enemyImages = ["enemyright","enemydown","enemydown"];//stores the position and charge level of each enemy
 
 //start game
 window.addEventListener("load", function () { 
@@ -151,9 +154,10 @@ function loadLevel () {
     animateEnemy(enemyBoxes[0], 0, "right", 0);
 	animateEnemy(enemyBoxes[1], 0, "down", 1);
 	animateEnemy(enemyBoxes[2], 0, "down", 2);
-	//chargeTorpedo(enemyBoxesPositions[0], "right", 0, "torpedo0");
-	//chargeTorpedo(enemyBoxesPositions[1], "down", 1, "torpedo1");
-	//chargeTorpedo(enemyBoxesPositions[2], "down", 2, "torpedo2");
+	chargeTorpedo(enemyBoxesPositions[0], "right", 0, "torpedo0");
+	chargeTorpedo(enemyBoxesPositions[1], "down", 1, "torpedo1");
+	chargeTorpedo(enemyBoxesPositions[2], "down", 2, "torpedo2");
+	enemyImages = ["enemyright","enemydown","enemydown"];
 }//loadLevel
 
 //animate enemy left to right (could add up and down to this)
@@ -162,7 +166,7 @@ function loadLevel () {
 //direction = current direction of enemy
 //animation = the enemy being animated
 function animateEnemy(boxes,index,direction,animation) {
-	
+    
 	//exit function if no animation
 	if (boxes.length <= 0) {
 		return;
@@ -180,17 +184,9 @@ function animateEnemy(boxes,index,direction,animation) {
             }//if
         }//for
     }//else if
-	
+		
 	//update images
-	if(direction == "right") {
-		boxes[index].classList.add("enemyright");
-	} else if (direction == "left") {
-		boxes[index].classList.add("enemyleft");
-	} else if (direction == "up") {
-		boxes[index].classList.add("enemyup");
-	} else {
-		boxes[index].classList.add("enemydown");
-	}//else
+	boxes[index].classList.add(enemyImages[animation]);
 		
 	//remove other images
 	for(i = 0; i < boxes.length; i ++) {
@@ -199,6 +195,14 @@ function animateEnemy(boxes,index,direction,animation) {
 			boxes[i].classList.remove("enemyright");
 			boxes[i].classList.remove("enemyup");
 			boxes[i].classList.remove("enemydown");
+            boxes[i].classList.remove("charge1enemyleft");
+			boxes[i].classList.remove("charge1enemyright");
+			boxes[i].classList.remove("charge1enemyup");
+			boxes[i].classList.remove("charge1enemydown");
+            boxes[i].classList.remove("charge2enemyleft");
+			boxes[i].classList.remove("charge2enemyright");
+			boxes[i].classList.remove("charge2enemyup");
+			boxes[i].classList.remove("charge2enemydown");
 		}//if
 	}//for
 	
@@ -208,6 +212,15 @@ function animateEnemy(boxes,index,direction,animation) {
 		if (index == boxes.length - 1) {
 			index --;
 			direction = "left";
+			
+			switch(enemyImages[animation]) {
+				case "enemyright": enemyImages[animation] = "enemyleft";
+					break;
+				case "charge1enemyright": enemyImages[animation] = "charge1enemyleft";
+					break;
+				case "charge2enemyright": enemyImages[animation] = "charge2enemyleft";
+					break;
+			}//switch
 		} else {
 			index ++;
 		}//else
@@ -219,6 +232,15 @@ function animateEnemy(boxes,index,direction,animation) {
 		if(index == 0) {
 			index ++;
 			direction = "right";
+			
+			switch(enemyImages[animation]) {
+				case "enemyleft": enemyImages[animation] = "enemyright";
+					break;
+				case "charge1enemyleft": enemyImages[animation] = "charge1enemyright";
+					break;
+				case "charge2enemyleft": enemyImages[animation] = "charge2enemyright";
+					break;
+			}//switch
 		} else {
 			index --;
 		}//else
@@ -230,6 +252,15 @@ function animateEnemy(boxes,index,direction,animation) {
 		if (index == boxes.length - 1) {
 			index --;
 			direction = "up";
+			
+			switch(enemyImages[animation]) {
+				case "enemydown": enemyImages[animation] = "enemyup";
+					break;
+				case "charge1enemydown": enemyImages[animation] = "charge1enemyup";
+					break;
+				case "charge2enemydown": enemyImages[animation] = "charge2enemyup";
+					break;
+			}//switch
 		} else {
 			index ++;
 		}//else
@@ -241,6 +272,15 @@ function animateEnemy(boxes,index,direction,animation) {
 		if(index == 0) {
 			index ++;
 			direction = "down";
+			
+			switch(enemyImages[animation]) {
+				case "enemyup": enemyImages[animation] = "enemydown";
+					break;
+				case "charge1enemyup": enemyImages[animation] = "charge1enemydown";
+					break;
+				case "charge2enemyup": enemyImages[animation] = "charge2enemydown";
+					break;
+			}//switch
 		} else {
 			index --;
 		}//else
@@ -264,8 +304,9 @@ function animateEnemy(boxes,index,direction,animation) {
  */
 function chargeTorpedo (currentEnemyBoxesPositions, shipDirection, torpedo, image) {
     
+    
 	//charge for 2 seconds with animation
-    chargingAnimation(torpedo);//torpedo here refers to the ship that fired the torpedo
+    //chargingAnimation(torpedo);//torpedo here refers to the ship that fired the torpedo
     setTimeout(function(){
     
         //choose a direction perpendicular to ship direction
@@ -297,8 +338,9 @@ function chargeTorpedo (currentEnemyBoxesPositions, shipDirection, torpedo, imag
     
 	//gets called every four seconds later.
 	fireTorpedos[torpedo] = setTimeout(function() {
+        console.log("torpedo charging at 335");
 		chargeTorpedo(currentEnemyBoxesPositions, shipDirection, torpedo, image);
-	}, 4000);
+	}, 9000);
 }//chargeTorpedo
 
 //every few seconds, the torpedo moves
@@ -335,13 +377,29 @@ function animateTorpedo (position, direction, torpedo, image) {
         return;
     } else {
         
-		//tell other torpedos where this one is
-		torpedoPositions[torpedo] = position;
+        //if it hits a torpedo
+        let matches = 0;
+        if(gridBoxes[position].className.includes("torpedored")) {
+            matches ++;
+        } if (gridBoxes[position].className.includes("torpedowhite")) {
+            matches ++;
+        } if (gridBoxes[position].className.includes("torpedopurple")) {
+            matches ++;
+        }//if
         
-        //set timeout to animate again
-        torpedos[torpedo] = setTimeout(function() {
-            animateTorpedo(position, direction, torpedo, image);
-        }, 1000);
+        if(matches > 1) {
+            torpedoExists[torpedo] = false;
+            torpedoPositions[torpedo] = null;
+        } else {
+            
+            //tell other torpedos where this one is
+            torpedoPositions[torpedo] = position;
+
+            //set timeout to animate again
+            torpedos[torpedo] = setTimeout(function() {
+                animateTorpedo(position, direction, torpedo, image);
+            }, 1000);
+        }
 	}//else
     
     //update image
@@ -361,7 +419,7 @@ function animateTorpedo (position, direction, torpedo, image) {
 
 //finish the process started by chargeTorpedo
 function fireTorpedo (currentEnemyBoxesPositions, direction, torpedo, param4) {
-    let torpedoSpeed 
+    let torpedoSpeed;
     
     switch (direction) {
 		case "right": torpedoSpeed = 1;
@@ -394,6 +452,7 @@ function torpedoHasCrashed (param1, param2, torpedo, param4) {
     if(torpedoExists[torpedo]) {
         setTimeout(torpedoHasCrashed(param1, param2, torpedo, param4), 500);
     } else {
+        console.log("torpedo charging at 433");
         chargeTorpedo(param1, param2, torpedo, param4);
     }//else
 }//torpedoHasCrashed
@@ -477,6 +536,9 @@ function levelUp() {
         clearTimeout(animations[0]);
         clearTimeout(animations[1]);
         clearTimeout(animations[2]);
+        clearTimeout(fireTorpedos[0]);
+        clearTimeout(fireTorpedos[1]);
+        clearTimeout(fireTorpedos[2]);
         setTimeout(function(){
             document.getElementById("levelup").style.display = "none";
             currentLevel ++;
@@ -536,10 +598,24 @@ function assimilatePlanet () {
 //changes the appearance of the ship in a few steps
 function chargingAnimation (ship) {
     //convert ship to charge1
-    //document.getElementsByClassName("enemyup").style.backgroundImage = "url('images/charge1enemyup')";
-    //document.getElementsByClassName("enemydown").style.backgroundImage = "url('images/charge1enemydown')";
+    console.log(enemyImages[ship], "to start", ship);
+    enemyImages[ship] = "charge1" + enemyImages[ship];
+    console.log(enemyImages[ship], "after first change");
     
     setTimeout(function() {
+		console.log(enemyImages[ship], "in first timeout", ship);
+		
         //convert ship to charge2
+		let sArray = [...enemyImages[ship]];
+        sArray[6] = '2';
+        enemyImages[ship] = sArray.join("");
+        console.log(enemyImages[ship], "after second change");
+		
+		setTimeout(function(){
+			//convert ship to charge0
+            console.log(enemyImages[ship], "in second timeout", ship);
+			enemyImages[ship] = enemyImages[ship].substr(7);
+            console.log(enemyImages[ship], "finally");
+		}, 1000);
     }, 1000);
 }//chargingAnimation

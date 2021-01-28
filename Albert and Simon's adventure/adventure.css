@@ -77,6 +77,30 @@ body {
 .enemyleft {
 	background-image:url("images/enemyleft.png");
 }
+.charge1enemyup {
+	background-image:url("images/charge1enemyup.png");
+}
+.charge1enemyright {
+	background-image:url("images/charge1enemyright.png");
+}
+.charge1enemydown {
+	background-image:url("images/charge1enemydown.png");
+}
+.charge1enemyleft {
+	background-image:url("images/charge1enemyleft.png");
+}
+.charge2enemyup {
+	background-image:url("images/charge2enemyup.png");
+}
+.charge2enemyright {
+	background-image:url("images/charge2enemyright.png");
+}
+.charge2enemydown {
+	background-image:url("images/charge2enemydown.png");
+}
+.charge2enemyleft {
+	background-image:url("images/charge2enemyleft.png");
+}
 .sphereup {
 	background-image:url("images/sphereup.png");
 }
