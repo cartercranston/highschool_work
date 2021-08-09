@@ -115,10 +115,10 @@ function paint() {
 
 //calls whenever the user moves their finger on the screen
 function dragCard(ev) {
-    console.log("touchmove");
+    console.log(ev.touches, "touchmove");
 }//dragCard()
 
 //calls whenever the user removes a finger from the screen
 function touchEnd(ev) {
-    console.log("ev");
+    console.log(ev.touches);
 }//releaseCard
