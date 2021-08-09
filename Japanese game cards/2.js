@@ -52,7 +52,7 @@ window.onload = function () {
     context = canvas.getContext('2d');
     setCanvasSize();
     document.addEventListener('touchmove', dragCard);
-    document.addEventListener('touchend', touchEnd);
+    document.addEventListener('touchend touchcancel', touchEnd);
     shuffle();
     drawCards();
     paint();
@@ -120,5 +120,5 @@ function dragCard(ev) {
 
 //calls whenever the user removes a finger from the screen
 function touchEnd(ev) {
-    console.log(ev);
+    console.log("ev");
 }//releaseCard
