@@ -51,8 +51,8 @@ window.onload = function () {
     canvas = document.getElementById('canvas');
     context = canvas.getContext('2d');
     setCanvasSize();
-    document.addEventListener('touchmove', dragCard);
-    document.addEventListener('touchend touchcancel', touchEnd);
+    document.querySelector('canvas').addEventListener('touchmove', dragCard);
+    document.querySelector('canvas').addEventListener('touchend', touchEnd);
     shuffle();
     drawCards();
     paint();
