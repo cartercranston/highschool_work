@@ -13,9 +13,7 @@
  * https://stackoverflow.com/questions/2303690/resizing-an-image-in-an-html5-canvas
 **/
 /**TODO
- * Allow scrying after milling
- * Fix card location glitch
- * Fix cardWidth/cardHeight and other absolute numbers
+ * isSplitCard always returns true
  * Fix image resolution
  * Make cards
 **/
@@ -63,12 +61,19 @@ var context;
 var lightbox;
 var lightboxContext;
 var cardsHidden = false;
-var cardWidth = Math.floor(272/1.5);
-var cardHeight = Math.floor(352/1.5);
+var cardWidth = canvasWidth / 4 - 6;
+var cardHeight = cardWidth * 352 / 272;
+if (cardHeight > canvasHeight / 4 - 28) {
+    cardHeight = canvasHeight / 4 - 28;
+    cardWidth = cardHeight * 272 / 352;
+}//if
+var buttonSize = canvasHeight / 9;
+var fontSize = buttonSize * 0.35;
+var textY = buttonSize / 2 + 5 + fontSize / 1.46 / 2;
 var selection;
-var CARDX = [5, cardWidth + 5, 2 * (cardWidth + 5), 5, cardWidth + 5, 2 * (cardWidth + 5)];
+var CARDX = [5, cardWidth + 10, 2 * cardWidth + 15, 5, cardWidth + 10, 2 * cardWidth + 15];
 var CARDY = [canvasHeight - (2 * cardHeight) - 10, canvasHeight - (2 * cardHeight) - 10, canvasHeight - (2 * cardHeight) - 10, canvasHeight - cardHeight - 5, canvasHeight - cardHeight - 5, canvasHeight - cardHeight - 5];
-for(let i = 0; i < 5; i ++) {
+for(let i = 0; i < 6; i ++) {
     CARDY[i] = Math.floor(CARDY[i]);
 }//for
 var cardX = [...CARDX];
@@ -79,6 +84,9 @@ var pointsSum;
 var allPlayersPointSum;
 var negativePoints = 0;
 var phase = "play";
+var bannerHeight = (CARDY[0] - 30 - buttonSize) / 2;
+var bannerX = canvasHeight / 12;
+
 
 //startup
 window.onload = function () {
@@ -129,21 +137,29 @@ function paint() {
     
     //buttons
     context.fillStyle = "#6600dd";//purple
-    context.fillRect(5,5,100,100);//clear button
-    context.fillRect(canvasWidth - 105,5,100,100);//show/hide button
+    context.fillRect(5,5,buttonSize,buttonSize);//clear button
+    context.fillRect(canvasWidth - buttonSize - 5,5,buttonSize,buttonSize);//show/hide button
     
     //button text
     context.fillStyle = "#000000";//black
-    context.font = 'normal 35px serif';//font size
+    context.font = 'normal ' + fontSize + 'px serif';//font size
     if(phase == "play") {
-        context.fillText("End",15,65);//text
+        //textHeight = 23px when buttonSize = 96.4px and font size = 33.75px. textHeight = font size / 1.46
+        //textWidth depends. when buttonSize = 98.333px and font size = 34.42px
+        //Hide: 66.1px = font size * 1.925
+        //Show: 76.24px = font size * 2.215
+        //End: 51.8px = font size * 1.51
+        //Start: 64.684px = font size * 1.88
+        //x = buttonSize / 2 + 5 - textWidth / 2
+        //y = buttonSize / 2 + 5 + textHeight / 2
+        context.fillText("End",buttonSize / 2 + 5 - fontSize * 1.51 / 2,textY);//text
     } else {
-        context.fillText("Start",15,65);//text
+        context.fillText("Start",buttonSize / 2 + 5 - fontSize * 1.88 / 2,textY);//text
     }//else
     if (cardsHidden) {
-        context.fillText("Show",canvasWidth - 88,65);//text
+        context.fillText("Show",canvasWidth - (buttonSize / 2 + 5 + fontSize * 2.215 / 2),textY);//text
     } else {
-        context.fillText("Hide",canvasWidth - 88,65);//text
+        context.fillText("Hide",canvasWidth - (buttonSize / 2 + 5 + fontSize * 1.925 / 2),textY);//text
     }//else
     
     //paint deck
@@ -174,23 +190,9 @@ function paint() {
     
     //paint mill banner
     if(phase=="mill") {
-        lightboxContext.fillStyle = "#6600dd";
-        lightboxContext.fillRect(0,canvasHeight/2 - 150,canvasWidth,200);
-        lightboxContext.fillStyle = "#000000"
-        lightboxContext.font = "normal 35px serif";
-        lightboxContext.fillText("If you won the round, add up all points:",100,canvasHeight/2-100);
-        lightboxContext.fillText("-",100,canvasHeight/2-50);
-        lightboxContext.fillText("+",220,canvasHeight/2-50);
-        lightboxContext.fillText(allPlayersPointSum,160,canvasHeight/2-50);
-        lightboxContext.fillText("Ok",100,canvasHeight/2);
+        drawBanner("If you won the round, add up all points:","-",allPlayersPointSum,"+","Ok");
     } else if(phase=="scry") {
-        lightboxContext.fillStyle = "#6600dd";
-        lightboxContext.fillRect(0,canvasHeight/2 - 150,canvasWidth,200);
-        lightboxContext.fillStyle = "#000000"
-        lightboxContext.font = "normal 35px serif"; 
-        lightboxContext.fillText("Click on up to two cards to put them",100,canvasHeight/2-100);
-        lightboxContext.fillText("on the bottom of your deck",100,canvasHeight/2-50);
-        lightboxContext.fillText("Ok",100,canvasHeight/2);
+        drawBanner("Click on up to two cards to put them","on the bottom of your deck","","","Ok");
     }//else if
 }//paint()
 
@@ -204,9 +206,9 @@ function select(ev) {
             break;
         }//if
     }//for
-    if(x < 105 && y < 105) {
+    if(x < buttonSize + 5 && y < buttonSize + 5) {
        selection = "clear";
-    } else if (x > canvasWidth - 105 && y < 105) {
+    } else if (x > canvasWidth - buttonSize - 5 && y < buttonSize + 5) {
         selection = "hide";
     }//else if
 }//select()
@@ -235,6 +237,9 @@ function touchEnd(ev) {
             handContents.splice(selection,1);
             cardX.splice(selection,1);
             cardY.splice(selection,1);
+            for(let i = 0; i < handContents.length; i++) {
+                snapToHand(i);
+            }//for
             paint();
         }//else
     } else if (selection == "hide") {
@@ -242,13 +247,7 @@ function touchEnd(ev) {
         paint();
     } else if (selection == "clear") {
         lightbox.style.zIndex = "1";
-        lightboxContext.fillStyle = "#6600dd";
-        lightboxContext.fillRect(0,canvasHeight/2 - 150,canvasWidth,200);
-        lightboxContext.fillStyle = "#000000"
-        lightboxContext.font = "normal 35px serif";
-        lightboxContext.fillText("Do you want to end the round?",100,canvasHeight/2-100);
-        lightboxContext.fillText("Yes",100,canvasHeight/2-50);
-        lightboxContext.fillText("No",200,canvasHeight/2-50);
+        drawBanner("Do you want to end the round?","Yes","","No","");
     }//else if
     selection = null;
 }//releaseCard
@@ -260,15 +259,15 @@ function snapToHand(card) {
             cardX[card] -= 0.5;
         } else if (cardX[card] < CARDX[card]) {
             cardX[card] += 0.5;
-        }//elseif
+        }//else if
         if(cardY[card] > CARDY[card]) {
             cardY[card] -= 0.5;
         } else if (cardY[card] < CARDY[card]) {
             cardY[card] += 0.5;
-        }//elseif
+        }//else if
         paint();
     }//while
-}//snapToGrid
+}//snapToHand
 
 //returns whether the card has hidden information
 function isSplitCard(card) {
@@ -277,15 +276,15 @@ function isSplitCard(card) {
 
 //called when the user clicks on the lightbox
 function lightboxConfirmation(ev) {
-    let x = ev.touches.item(0).pageX - (cardWidth / 2);
-    let y = ev.touches.item(0).pageY - (cardHeight / 2);
+    let x = ev.touches.item(0).pageX;
+    let y = ev.touches.item(0).pageY;
     console.log(x,y);
     if(phase == "mill") {
-        if (x > 10 && x < 20 && y > 261 && y < 272) {
+        if (x > bannerX - 5 && x < bannerX + 5 + fontSize / 3.4 && y > bannerHeight + 45 - fontSize / 3.4 && y < bannerHeight + 55) {
             allPlayersPointSum --;
-        } else if (x > 124 && x < 156 && y > 261 && y < 272) {
+        } else if (x > bannerX * 2.2 && x < bannerX * 2.2 + fontSize / 1.75 && y > bannerHeight + 50 - fontSize / 1.75 && y < bannerHeight + 50) {
             allPlayersPointSum ++;
-        } else if (x > 12 && x < 50 && y > 303 && y < 328) {
+        } else if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 100 - fontSize / 1.5 && y < bannerHeight + 100) {
             negativePoints += allPlayersPointSum;
             if(negativePoints > 0) {
                 deckContents.splice(0,negativePoints);
@@ -296,7 +295,7 @@ function lightboxConfirmation(ev) {
             lightboxContext.clearRect(0,0,canvasWidth,canvasHeight);
         }//else if
     } else if (phase == "play") {
-        if (x > 13 && x < 65 && y > 250 && y < 282) {
+        if (x > bannerX && x < bannerX + fontSize * 1.4 && y > bannerHeight + 50 - fontSize / 1.5 && y < bannerHeight + 50) {
             pointsSum = 0;
             for(let i = 0; i < playContents.length; i ++) {
                 pointsSum += +playContents[i].alt;
@@ -315,12 +314,12 @@ function lightboxConfirmation(ev) {
             phase = "mill";
             cardsHidden = true;
             allPlayersPointSum = 0;           
-        } else if (x > 110 && x < 150 && y > 250 && y < 282) {
+        } else if (x > bannerX * 2.2 && x < bannerX * 2.2 + fontSize * 1.15 && y > bannerHeight + 50 - fontSize / 1.5  && y < bannerHeight + 50) {
             lightbox.style.zIndex = "-1";
             lightboxContext.clearRect(0,0,canvasWidth,canvasHeight);
         }//else
     } else if (phase=="scry") {
-        if (x > 12 && x < 50 && y > 303 && y < 328) {
+        if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 100 - fontSize / 1.5 && y < bannerHeight + 100) {
             phase = "play";
             lightboxContext.clearRect(0,0,canvasWidth,canvasHeight);
             lightbox.style.zIndex = "-1";
@@ -337,3 +336,16 @@ function lightboxConfirmation(ev) {
     }//else if
     paint();
 }//lightboxConfirmation()
+
+//draws a user prompt banner and the text in it
+function drawBanner(text1,text2,text3,text4,text5) {
+    lightboxContext.fillStyle = "#6600dd";
+    lightboxContext.fillRect(0,buttonSize + 15,canvasWidth,bannerHeight);
+    lightboxContext.fillStyle = "#000000"
+    lightboxContext.font = "normal " + fontSize + "px serif";
+    lightboxContext.fillText(text1,bannerX,bannerHeight);//prompt: line 1
+    lightboxContext.fillText(text2,bannerX,bannerHeight + 50);//prompt: line 2 or - or Yes
+    lightboxContext.fillText(text3,bannerX * 1.6,bannerHeight + 50);//number
+    lightboxContext.fillText(text4,bannerX * 2.2,bannerHeight + 50);//+ or No
+    lightboxContext.fillText(text5,bannerX,bannerHeight + 100);//Ok
+}//drawBanner()
