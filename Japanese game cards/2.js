@@ -388,7 +388,7 @@ function lightboxConfirmation(ev) {
             allPlayersPointSum --;
         } else if (x > bannerX * 2.6 && x < bannerX * 2.6 + fontSize / 1.75 && y > bannerHeight + 25 - fontSize / 1.75 && y < bannerHeight + 25) {
             allPlayersPointSum ++;
-        } else if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 50 - fontSize / 1.5 && y < bannerHeight + 50) {
+        } else if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 60 - fontSize / 1.5 && y < bannerHeight + 60) {
             negativePoints += allPlayersPointSum;
             if(negativePoints > 0) {
                 deckContents.splice(0,negativePoints);
@@ -423,7 +423,7 @@ function lightboxConfirmation(ev) {
             lightboxContext.clearRect(0,0,canvasWidth,canvasHeight);
         }//else
     } else if (phase=="scry") {
-        if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 50 - fontSize / 1.5 && y < bannerHeight + 50) {
+        if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 60 - fontSize / 1.5 && y < bannerHeight + 60) {
             phase = "play";
             lightboxContext.clearRect(0,0,canvasWidth,canvasHeight);
             lightbox.style.zIndex = "-1";
@@ -452,7 +452,7 @@ function drawBanner(text1,text2,text3,text4,text5,text6) {
     lightboxContext.fillText(text3,bannerX,bannerHeight + 25);// - or Yes
     lightboxContext.fillText(text4,bannerX * 1.8,bannerHeight + 25);//number
     lightboxContext.fillText(text5,bannerX * 2.6,bannerHeight + 25);//+ or No
-    lightboxContext.fillText(text6,bannerX,bannerHeight + 50);//Ok
+    lightboxContext.fillText(text6,bannerX,bannerHeight + 60);//Ok
 }//drawBanner()
 
 //takes in an array containing several strings, and makes a card with those strings written on it
