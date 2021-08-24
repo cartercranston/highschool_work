@@ -6,3 +6,8 @@
 body {
     overscroll-behavior: none;
 }
+
+html, body {
+  position: fixed;
+  overflow: hidden;
+}

@@ -11,9 +11,6 @@
  * When the clear button is pressed, confirmation will be asked. Then, the play array will be cleared, a points value will be shown, the player will be allowed to mill and/or scry and the hand will be refilled from the deck.
  * * The cards will need to know their values
 **/
-/**TODO
- * Fix - and + buttons wherever they appear
-**/
 
 //Cards
 //number of strings in top half of card (minus word type), number of strings in bottom half of card (minus card name), strings containing card content, true(split)/false(full), point value
@@ -384,9 +381,9 @@ function lightboxConfirmation(ev) {
     let y = ev.touches.item(0).pageY;
     console.log(x,y);
     if(phase == "mill") {
-        if (x > bannerX - 5 && x < bannerX + 5 + fontSize / 3.4 && y > bannerHeight + 20 - fontSize / 3.4 && y < bannerHeight + 30) {
+        if (x > bannerX - 7 && x < bannerX + 7 + fontSize / 3.4 && y > bannerHeight + 18 - fontSize / 3.4 && y < bannerHeight + 32) {
             allPlayersPointSum --;
-        } else if (x > bannerX * 2.6 && x < bannerX * 2.6 + fontSize / 1.75 && y > bannerHeight + 25 - fontSize / 1.75 && y < bannerHeight + 25) {
+        } else if (x > bannerX * 2.6 - 2 && x < bannerX * 2.6 + fontSize / 1.75 + 2 && y > bannerHeight + 23 - fontSize / 1.75 && y < bannerHeight + 27) {
             allPlayersPointSum ++;
         } else if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 60 - fontSize / 1.5 && y < bannerHeight + 60) {
             negativePoints += allPlayersPointSum;
