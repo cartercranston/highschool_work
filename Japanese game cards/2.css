@@ -2,3 +2,7 @@
     margin: 0;
     position:absolute;
 }
+
+body {
+    overscroll-behavior: none;
+}
