@@ -12,7 +12,7 @@
  * * The cards will need to know their values
 **/
 /**TODO
- * Fix bug that crashes program
+ * Fix - and + buttons wherever they appear
 **/
 
 //Cards
@@ -97,7 +97,7 @@ for(let i = 0; i < 6; i ++) {
 }//for
 
 //slots in play
-var PLAYX = [3, cardWidth + 6, 2 * cardWidth + 9, 3 * cardWidth + 12, 4 * cardWidth + 15, 5 * cardWidth + 18]
+var PLAYX = [3, cardWidth + 6, 2 * cardWidth + 9];
 var PLAYY = Math.floor(buttonSize + 6);
 
 var cardX;//current locations of cards in hand
@@ -206,7 +206,7 @@ function paint() {
         context.fillText("Hide",canvasWidth - (buttonSize / 2 + 3 + fontSize * 1.925 / 2),textY);//text
     }//else
     
-    //paint deck
+    //text at top of screen
     context.fillStyle = "#000000";//black
     context.fillText(deckContents.length + " cards in deck",canvasWidth / 2 - fontSize * 3.4, fontSize * 2);//deck
     context.fillText("You have " + negativePoints + " points.",canvasWidth / 2 - fontSize * 3.7, fontSize);//points for の and copulas
@@ -214,13 +214,22 @@ function paint() {
     context.fillText("+",canvasWidth / 2 + fontSize * 4.1, fontSize);//button for の and copulas
     
     if(cardsHidden) {
-        //paint play area
-        for(let i = 0; i < playContents.length; i++) {
-            paintCard(playContents[i],i,false,false);
-            if(isSplitCard(playContents[i])) {
-                context.clearRect(playX[i] + 1,playY[i] + (cardHeight / 2) - 5,cardWidth - 2,(cardHeight / 2) + 4);
-            }//if
-        }//for
+        //paint play area        
+        if (playContents.length <= 3) {
+            for (let i = 0; i < playContents.length; i++) {
+                paintCard(playContents[i],i,false,false);
+                if(isSplitCard(playContents[i])) {
+                    context.clearRect(playX[i] + 1,playY[i] + (cardHeight / 2) - 5,cardWidth - 2,(cardHeight / 2) + 4);
+                }//if
+            }//for
+        } else {
+            for (let i = playContents.length - 1; i > playContents.length - 4 && i >= 0; i--) {
+                paintCard(playContents[i],i + 3 - playContents.length,false,false);
+                if(isSplitCard(playContents[i])) {
+                    context.clearRect(playX[i + 3 - playContents.length] + 1,playY[i + 3 - playContents.length] + (cardHeight / 2) - 5,cardWidth - 2,(cardHeight / 2) + 4);
+                }//if
+            }//for
+        }//else
     } else {
         //paint hand
         for (let i = 0; i < handContents.length; i++) {
@@ -235,9 +244,16 @@ function paint() {
         }//for
 
         //paint play area
-        for (let i = 0; i < playContents.length; i++) {
-            paintCard(playContents[i],i,false,false);
-        }//for
+        if (playContents.length <= 3) {
+            for (let i = 0; i < playContents.length; i++) {
+                paintCard(playContents[i],i,false,false);
+            }//for
+        } else {
+            for (let i = playContents.length - 1; i > playContents.length - 4 && i >= 0; i--) {
+                paintCard(playContents[i],i + 3 - playContents.length,false,false);
+            }//for
+        }//else
+        
     }//else
     
     //paint mill banner
@@ -252,6 +268,7 @@ function paint() {
 function select(ev) {
     let x = ev.touches.item(0).pageX;
     let y = ev.touches.item(0).pageY;
+    console.log(x,y);
     for(let i = 0; i < handContents.length; i++) {
         if(x > cardX[i] && x < cardX[i] + cardWidth && y > cardY[i] && y < cardY[i] + cardHeight) {
             selection = i;
@@ -263,10 +280,10 @@ function select(ev) {
        selection = "clear";
     } else if (x > canvasWidth - buttonSize - 5 && y < buttonSize + 5) {
         selection = "hide";
-    } else if (x > canvasWidth / 2 - fontSize * 5 && x < canvasWidth / 2 - fontSize * 4 && y > fontSize * 1.6 && y < fontSize * 2.1) {
+    } else if (x > canvasWidth / 2 - fontSize * 5 && x < canvasWidth / 2 - fontSize * 4 && y > fontSize / 2 && y < fontSize) {
         negativePoints --;
         paint();
-    } else if (x > canvasWidth / 2 + fontSize * 5 && x < canvasWidth / 2 + fontSize * 6 && y > fontSize * 1.6 && y < fontSize * 2.1) {
+    } else if (x > canvasWidth / 2 + fontSize * 3.9 && x < canvasWidth / 2 + fontSize * 4.7 && y > fontSize / 2 && y < fontSize) {
         negativePoints ++;
         paint();
     }//else if
@@ -275,8 +292,8 @@ function select(ev) {
 //calls whenever the user moves their finger on the screen
 function dragCard(ev) {
     if(Number.isInteger(selection)) {
-        let x = ev.touches.item(0).pageX - cardWidth;
-        let y = ev.touches.item(0).pageY - cardHeight;
+        let x = ev.touches.item(0).pageX - cardWidth * 1.8;
+        let y = ev.touches.item(0).pageY - cardHeight * 1.8;
         cardX[selection] = Math.floor(x);
         cardY[selection] = Math.floor(y);
     }//if
@@ -286,14 +303,20 @@ function dragCard(ev) {
 //calls whenever the user removes a finger from the screen
 function touchEnd(ev) {
     if (Number.isInteger(selection)) {
-        if (cardY[selection] > CARDY[0] - (cardHeight / 2)) {
+        if (cardY[selection] > CARDY[0] - cardHeight / 1.2) {
             snapToHand(selection);//if the card stays in your hand, it returns to its position
         } else {
             //move selection to playContents, playX and playY
             playContents[playContents.length] = handContents[selection];
+            if (playContents.length > 3) {
+                playX.splice(0,1);
+                playY.splice(0,1);
+            }//if
             playX[playX.length] = cardX[selection];
             playY[playY.length] = cardY[selection];
-            snapToPlay(playContents.length - 1);
+            for (let i = 0; i < playX.length; i ++) {
+                snapToPlay(i);
+            }
             handContents.splice(selection,1);
             cardX.splice(selection,1);
             cardY.splice(selection,1);
@@ -333,18 +356,18 @@ function snapToHand(card) {
 }//snapToHand()
 
 //a played card flies to its new position
-function snapToPlay(card) {
+function snapToPlay(index) {
     cardHeld = false;
-    while(playX[card] != PLAYX[card] || playY[card] != PLAYY) {
-        if(playX[card] > PLAYX[card]) {
-            playX[card] -= 0.5;
-        } else if (playX[card] < PLAYX[card]) {
-            playX[card] += 0.5;
+    while(playX[index] != PLAYX[index] || playY[index] != PLAYY) {
+        if(playX[index] > PLAYX[index]) {
+            playX[index] -= 0.5;
+        } else if (playX[index] < PLAYX[index]) {
+            playX[index] += 0.5;
         }//else if
-        if(playY[card] > PLAYY) {
-            playY[card] -= 0.5;
-        } else if (playY[card] < PLAYY) {
-            playY[card] += 0.5;
+        if(playY[index] > PLAYY) {
+            playY[index] -= 0.5;
+        } else if (playY[index] < PLAYY) {
+            playY[index] += 0.5;
         }//else if
         paint();
     }//while
@@ -359,6 +382,7 @@ function isSplitCard(card) {
 function lightboxConfirmation(ev) {
     let x = ev.touches.item(0).pageX;
     let y = ev.touches.item(0).pageY;
+    console.log(x,y);
     if(phase == "mill") {
         if (x > bannerX - 5 && x < bannerX + 5 + fontSize / 3.4 && y > bannerHeight + 20 - fontSize / 3.4 && y < bannerHeight + 30) {
             allPlayersPointSum --;
@@ -454,7 +478,11 @@ function paintCard (card,index,inHand,held) {
     
     context.fillStyle = "#000000";
     context.fillRect(x,y,width,height);
-    context.fillStyle = "#ffffff";
+    if (held && cardY[index] <= CARDY[0] - cardHeight / 1.2) {
+        context.fillStyle = "#ddffdd";
+    } else {
+        context.fillStyle = "#ffffff";
+    }
     context.fillRect(x + 1,y + 1,width - 2,height - 2);
     
     y += 5;
