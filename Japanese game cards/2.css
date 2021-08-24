@@ -1,13 +1,8 @@
 * {
-    margin: 0;
-    position:absolute;
-}
-
-body {
-    overscroll-behavior: none;
+  margin: 0;
+  position:absolute;
 }
 
 html, body {
   position: fixed;
-  overflow: hidden;
 }
