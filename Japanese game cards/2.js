@@ -100,16 +100,16 @@ for(let i = 0; i < 6; i ++) {
 var PLAYX = [3, cardWidth + 6, 2 * cardWidth + 9, 3 * cardWidth + 12, 4 * cardWidth + 15, 5 * cardWidth + 18]
 var PLAYY = Math.floor(buttonSize + 6);
 
-var cardX = [...CARDX];//current locations of cards in hand
-var cardY = [...CARDY];//current locations of cards in hand
+var cardX;//current locations of cards in hand
+var cardY;//current locations of cards in hand
 var playX = [];//filled from cardX
 var playY = [];//filled from cardY
 var pointsSum;//your personal sum this round
 var allPlayersPointSum;//sum of all players
 var negativePoints = 0;//your personal negative points between rounds
 var phase = "play";//"play","mill" or "scry" to keep track of game state
-var bannerHeight = (CARDY[0] - 30 - canvasHeight / 9) / 2;//used for banner height and to position text in banners
-var bannerX = canvasHeight / 12;//used to position text in banners
+var bannerHeight = (CARDY[0] - 30 - canvasHeight / 9) / 1.5;//used for banner height and to position text in banners
+var bannerX = canvasHeight / 24;//used to position text in banners
 
 
 //startup
@@ -168,6 +168,8 @@ function shuffle() {
 
 //draw up to 6 cards in hand
 function drawCards() {
+    cardX = [...CARDX];
+    cardY = [...CARDY];
     while(handContents.length < 6) {
         handContents[handContents.length] = deckContents[0];
         deckContents.splice(0,1);
@@ -216,7 +218,7 @@ function paint() {
         for(let i = 0; i < playContents.length; i++) {
             paintCard(playContents[i],i,false,false);
             if(isSplitCard(playContents[i])) {
-                context.clearRect(playX[i],playY[i] + (cardWidth / 2),cardWidth,(cardHeight / 2));
+                context.clearRect(playX[i] + 1,playY[i] + (cardHeight / 2) - 5,cardWidth - 2,(cardHeight / 2) + 4);
             }//if
         }//for
     } else {
@@ -240,9 +242,9 @@ function paint() {
     
     //paint mill banner
     if(phase=="mill") {
-        drawBanner("If you won the round, add up all points:","-",allPlayersPointSum,"+","Ok");
+        drawBanner("If you won the round, add up all","points:","-",allPlayersPointSum,"+","Ok");
     } else if(phase=="scry") {
-        drawBanner("Click on up to two cards to put them","on the bottom of your deck","","","Ok");
+        drawBanner("Click on up to two cards to put them","on the bottom of your deck","","","","Ok");
     }//else if
 }//paint()
 
@@ -307,7 +309,7 @@ function touchEnd(ev) {
         paint();
     } else if (selection == "clear") {
         lightbox.style.zIndex = "1";
-        drawBanner("Do you want to end the round?","Yes","","No","");
+        drawBanner("Do you want to end the round?","","Yes","","No","");
     }//else if
     selection = null;
 }//releaseCard()
@@ -357,13 +359,12 @@ function isSplitCard(card) {
 function lightboxConfirmation(ev) {
     let x = ev.touches.item(0).pageX;
     let y = ev.touches.item(0).pageY;
-    console.log(x,y);
     if(phase == "mill") {
-        if (x > bannerX - 5 && x < bannerX + 5 + fontSize / 3.4 && y > bannerHeight + 45 - fontSize / 3.4 && y < bannerHeight + 55) {
+        if (x > bannerX - 5 && x < bannerX + 5 + fontSize / 3.4 && y > bannerHeight + 20 - fontSize / 3.4 && y < bannerHeight + 30) {
             allPlayersPointSum --;
-        } else if (x > bannerX * 2.2 && x < bannerX * 2.2 + fontSize / 1.75 && y > bannerHeight + 50 - fontSize / 1.75 && y < bannerHeight + 50) {
+        } else if (x > bannerX * 2.6 && x < bannerX * 2.6 + fontSize / 1.75 && y > bannerHeight + 25 - fontSize / 1.75 && y < bannerHeight + 25) {
             allPlayersPointSum ++;
-        } else if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 100 - fontSize / 1.5 && y < bannerHeight + 100) {
+        } else if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 50 - fontSize / 1.5 && y < bannerHeight + 50) {
             negativePoints += allPlayersPointSum;
             if(negativePoints > 0) {
                 deckContents.splice(0,negativePoints);
@@ -374,31 +375,31 @@ function lightboxConfirmation(ev) {
             lightboxContext.clearRect(0,0,canvasWidth,canvasHeight);
         }//else if
     } else if (phase == "play") {
-        if (x > bannerX && x < bannerX + fontSize * 1.4 && y > bannerHeight + 50 - fontSize / 1.5 && y < bannerHeight + 50) {
+        if (x > bannerX && x < bannerX + fontSize * 1.8 && y > bannerHeight + 25 - fontSize / 1.5 && y < bannerHeight + 25) {
             pointsSum = 0;
             for(let i = 0; i < playContents.length; i ++) {
-                pointsSum += +playContents[i].alt;
+                pointsSum += playContents[i][playContents[i].length - 1];
             }//for
             playContents = [];
             lightboxContext.clearRect(0,0,canvasWidth,canvasHeight);
             if(pointsSum >= 2 || pointsSum == 0) {
-                lightboxContext.fillText("Total: gain " + pointsSum + " points",200,50);
+                lightboxContext.fillText("Total: gain " + pointsSum + " points",canvasWidth / 2 - fontSize * 3.4, fontSize * 3);
             } else if (pointsSum <= -2) {
-                lightboxContext.fillText("Total: lose " + -pointsSum + " points",200,50);
+                lightboxContext.fillText("Total: lose " + -pointsSum + " points",canvasWidth / 2 - fontSize * 3.4, fontSize * 3);
             } else if (pointsSum == 1) {
-                lightboxContext.fillText("Total: gain 1 point",200,50);
+                lightboxContext.fillText("Total: gain 1 point",canvasWidth / 2 - fontSize * 3.4, fontSize * 3);
             } else {
-                lightboxContext.fillText("Total: lose 1 point",200,50);
+                lightboxContext.fillText("Total: lose 1 point",canvasWidth / 2 - fontSize * 3.4, fontSize * 3);
             }//else
             phase = "mill";
             cardsHidden = true;
             allPlayersPointSum = 0;           
-        } else if (x > bannerX * 2.2 && x < bannerX * 2.2 + fontSize * 1.15 && y > bannerHeight + 50 - fontSize / 1.5  && y < bannerHeight + 50) {
+        } else if (x > bannerX * 2.6 && x < bannerX * 2.6 + fontSize * 1.15 && y > bannerHeight + 25 - fontSize / 1.5  && y < bannerHeight + 25) {
             lightbox.style.zIndex = "-1";
             lightboxContext.clearRect(0,0,canvasWidth,canvasHeight);
         }//else
     } else if (phase=="scry") {
-        if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 100 - fontSize / 1.5 && y < bannerHeight + 100) {
+        if (x > bannerX && x < bannerX + fontSize * 1.22 && y > bannerHeight + 50 - fontSize / 1.5 && y < bannerHeight + 50) {
             phase = "play";
             lightboxContext.clearRect(0,0,canvasWidth,canvasHeight);
             lightbox.style.zIndex = "-1";
@@ -417,16 +418,17 @@ function lightboxConfirmation(ev) {
 }//lightboxConfirmation()
 
 //draws a user prompt banner and the text in it
-function drawBanner(text1,text2,text3,text4,text5) {
+function drawBanner(text1,text2,text3,text4,text5,text6) {
     lightboxContext.fillStyle = "#6600dd";
     lightboxContext.fillRect(0,buttonSize + 15,canvasWidth,bannerHeight);
     lightboxContext.fillStyle = "#000000"
     lightboxContext.font = "normal " + fontSize + "px serif";
-    lightboxContext.fillText(text1,bannerX,bannerHeight);//prompt: line 1
-    lightboxContext.fillText(text2,bannerX,bannerHeight + 50);//prompt: line 2 or - or Yes
-    lightboxContext.fillText(text3,bannerX * 1.6,bannerHeight + 50);//number
-    lightboxContext.fillText(text4,bannerX * 2.2,bannerHeight + 50);//+ or No
-    lightboxContext.fillText(text5,bannerX,bannerHeight + 100);//Ok
+    lightboxContext.fillText(text1,bannerX,bannerHeight - 25);//prompt: line 1
+    lightboxContext.fillText(text2,bannerX,bannerHeight);//prompt: line 2
+    lightboxContext.fillText(text3,bannerX,bannerHeight + 25);// - or Yes
+    lightboxContext.fillText(text4,bannerX * 1.8,bannerHeight + 25);//number
+    lightboxContext.fillText(text5,bannerX * 2.6,bannerHeight + 25);//+ or No
+    lightboxContext.fillText(text6,bannerX,bannerHeight + 50);//Ok
 }//drawBanner()
 
 //takes in an array containing several strings, and makes a card with those strings written on it
