@@ -11,6 +11,8 @@
  * When the clear button is pressed, confirmation will be asked. Then, the play array will be cleared, a points value will be shown, the player will be allowed to mill and/or scry and the hand will be refilled from the deck.
  * * The cards will need to know their values
 **/
+/**Bugs
+**/
 
 //Cards
 //number of strings in top half of card (minus word type), number of strings in bottom half of card (minus card name), strings containing card content, true(split)/false(full), point value
@@ -167,6 +169,9 @@ function shuffle() {
 function drawCards() {
     cardX = [...CARDX];
     cardY = [...CARDY];
+    playX = [];
+    playY = [];
+    playContents = [];
     while(handContents.length < 6) {
         handContents[handContents.length] = deckContents[0];
         deckContents.splice(0,1);
@@ -265,7 +270,6 @@ function paint() {
 function select(ev) {
     let x = ev.touches.item(0).pageX;
     let y = ev.touches.item(0).pageY;
-    console.log(x,y);
     for(let i = 0; i < handContents.length; i++) {
         if(x > cardX[i] && x < cardX[i] + cardWidth && y > cardY[i] && y < cardY[i] + cardHeight) {
             selection = i;
@@ -290,7 +294,7 @@ function select(ev) {
 function dragCard(ev) {
     if(Number.isInteger(selection)) {
         let x = ev.touches.item(0).pageX - cardWidth * 1.8;
-        let y = ev.touches.item(0).pageY - cardHeight * 1.8;
+        let y = ev.touches.item(0).pageY - cardHeight * 1.5;
         cardX[selection] = Math.floor(x);
         cardY[selection] = Math.floor(y);
     }//if
@@ -379,7 +383,7 @@ function isSplitCard(card) {
 function lightboxConfirmation(ev) {
     let x = ev.touches.item(0).pageX;
     let y = ev.touches.item(0).pageY;
-    console.log(x,y);
+
     if(phase == "mill") {
         if (x > bannerX - 7 && x < bannerX + 7 + fontSize / 3.4 && y > bannerHeight + 18 - fontSize / 3.4 && y < bannerHeight + 32) {
             allPlayersPointSum --;
