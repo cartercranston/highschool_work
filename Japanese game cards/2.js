@@ -105,7 +105,7 @@ const ね = [2,2,"Particle","Terminal, provided the previous","card is terminal.
 const に = [3,4,"Particle","Next: noun, adjective, adverb or","verb.","Non-terminal.","に (*target marker)","Can only be played after a noun.","Nouns and adjectives","aren't terminal.","(Don't cover)",false,0];
 
 //const あ = [5,3,"Verb conjugation","If the previous card is Type 1,","next: auxiliary, noun, particle or","copula, and this card counts as a","noun. If the previous card is Type","5, next: あ-stem auxiliary.","あ-stem","Terminal, provided the previous","card is Type 1.","(Don't cover)",false,0];
-const あ = [2,2,"Verb conjugation","Next: noun, particle, adverb or","copula.","Can only be played after a Type 1 verb.","あ-stem","Terminal.","(Don't cover)",false,0];
+const あ = [3,2,"Verb conjugation","Next: noun, particle, adverb or","copula.","Can only be played after a Type 1 verb.","あ-stem","Terminal.","(Don't cover)",false,0];
 const た = [1,2,"Verb conjugation","Next: noun or particle","た-form (*past tense)","Terminal","(Don't cover)",false,0];
 const て = [3,1,"Verb conjugation","Next: noun, adjective, adverb or","verb.","Non-terminal","て-form (*continuous)","(Don't cover)"];
 const え = [5,2,"Verb conjugation","If the previous card is Type 1,","next: auxiliary, noun, particle or","copula, and this card counts as a","noun. If the previous card is Type","5, next: え-stem auxiliary.","え-stem (*imperative)","Terminal.","(Don't cover)",false,0];
