@@ -12,6 +12,69 @@
  * * The cards will need to know their values
 **/
 /**Bugs
+ * Mistakes can't be undone
+**/
+/**Deck
+Current
+ * Nouns: 7
+ * * 1 to follow nouns
+ * * 1 to start a sentence
+ * * 2 to follow particles
+ * * 2 to follow verbs/conjugations
+ * * 1 to follow an adjective
+ * * 4 to be followed by particles
+ * * 2 to be followed by copulas
+ * * 1 to be followed by nouns
+ * Particles: 5
+ * * 4 to follow nouns
+ * * 1 to follow a verb
+ * * 2 to be followed by nouns
+ * * 2 to be followed by verbs/conjugations
+ * * 1 to end a sentence
+ * Verbs/conjugations: 8
+ * * 3 to follow verbs
+ * * 2 to follow particles
+ * * 3 to start sentences
+ * * 3 to be followed by conjugations
+ * * 2 to be followed by nouns
+ * * 1 to be followed by a particle
+ * * 2 to be followed by helpers
+ * Adjectives: 3
+ * * 3 to start sentences
+ * * 1 to be followed by a noun 
+ * * 2 to end sentences
+ * Helpers: 2
+ * * 2 to follow conjugations
+ * * 2 to end sentences
+ * Adverbs: 2
+ * Copulas: 2
+ * * 2 to follow nouns
+ * * 2 to end sentences
+Ideal
+ * Nouns: 7
+ * * 1 to follow a verb
+ * * 4 to follow adjectives
+ * * 2 to follow particles
+ * Particles: 9
+ * * 5 to be followed by verbs
+ * * 2 to be followed by particles
+ * * 2 to be followed by nouns
+ * Verbs: 5
+ * * 5 to follow particles
+ * * 1 to be followed by a noun
+ * * 1 to be followed by an 一段 stem
+ * * 3 to wrap up sentences
+ * Stems: 2
+ * * 1 to be followed by a helper
+ * * 1 to be a noun
+ * Helpers: 1
+ * * Continues to wrap up sentence
+ * Other conjugations: 1
+ * * Does nothing
+ * Adjectives: 4
+ * * 2 to start sentences
+ * * 2 to follow particles
+ * * 4 to be followed by nouns
 **/
 
 //Cards
@@ -30,22 +93,27 @@ const 出る = [4,1,"Verb","Next: noun, particle or verb","conjugation.","Termin
 const 立つ = [4,1,"Verb","Next: noun, particle or verb","conjugation.","Terminal. Initial.","Type 5. Intransitive","立つ (stand)","Lose 1 point",true,-1];
 const 生まれる = [4,1,"Verb","Next: noun, particle or verb","conjugation.","Terminal. Initial.","Type 1. Intransitive","生まれる (be born)","Gain 1 point",true,1];
 
-const 大きい = [4,1,"Adjective","Next: noun, particle or です","copula.","Terminal. Initial.","Type 5. Intransitive","大きい (big)","Gain 1 point",true,1];
-const 丸い = [4,1,"Adjective","Next: noun, particle or です","copula.","Terminal. Initial.","Type 5. Intransitive","丸い/円い (round)","Lose 1 point",true,-1];
-const 正しい = [4,1,"Adjective","Next: noun, particle or です","copula.","Terminal. Initial.","Type 5. Intransitive","大きい (correct)","Gain 3 points",true,3];
+const 大きい = [3,1,"Adjective","Next: noun, particle or です","copula.","Terminal. Initial.","大きい (big)","Gain 1 point",true,1];
+const 丸い = [3,1,"Adjective","Next: noun, particle or です","copula.","Terminal. Initial.","丸い/円い (round)","Lose 1 point",true,-1];
+const 正しい = [3,1,"Adjective","Next: noun, particle or です","copula.","Terminal. Initial.","大きい (correct)","Gain 3 points",true,3];
 
 const の = [5,5,"Particle","If played after a noun, next: noun.","If played after a な particle,","adjective or verb, next: copula.","Terminal, provided the previous","card is terminal.","の ('s)","Can only be played after a noun","adjective, verb or な particle.","When played, if the previous","card isn't a の-noun, lose 1 point.","(Don't cover)",false,0];
 const を = [3,4,"Particle","Next: noun, adverb, adjective or","verb.","Non-terminal.","を (*object marker)","Can only be played after a noun.","Nouns, adjectives and","intransitive verbs aren't terminal.","(Don't cover)",false,0];
-const な = [2,3,"Particle","Next: noun or の-particle","Non-terminal.","な (*adjectival particle)","Can only be played after a な-noun.","(Don't cover)",false,0];
+//Can only be played after a な-noun
+const な = [2,2,"Particle","Next: noun or の-particle","Non-terminal.","な (*adjectival particle)","Can only be played after a noun.","(Don't cover)",false,0];
 const ね = [2,2,"Particle","Terminal, provided the previous","card is terminal.","ね (eh?)","Lose 2 points","(Don't cover)",false,-2];
 const に = [3,4,"Particle","Next: noun, adjective, adverb or","verb.","Non-terminal.","に (*target marker)","Can only be played after a noun.","Nouns and adjectives","aren't terminal.","(Don't cover)",false,0];
 
-const あ = [5,3,"Verb conjugation","If the previous card is Type 1,","next: auxiliary, noun, particle or","copula, and this card counts as a","noun. If the previous card is Type","5, next: あ-stem auxiliary.","あ-stem","Terminal, provided the previous","card is Type 1.","(Don't cover)",false,0];
+//const あ = [5,3,"Verb conjugation","If the previous card is Type 1,","next: auxiliary, noun, particle or","copula, and this card counts as a","noun. If the previous card is Type","5, next: あ-stem auxiliary.","あ-stem","Terminal, provided the previous","card is Type 1.","(Don't cover)",false,0];
+const あ = [2,2,"Verb conjugation","Next: noun, particle, adverb or","copula.","Can only be played after a Type 1 verb.","あ-stem","Terminal.","(Don't cover)",false,0];
 const た = [1,2,"Verb conjugation","Next: noun or particle","た-form (*past tense)","Terminal","(Don't cover)",false,0];
+const て = [3,1,"Verb conjugation","Next: noun, adjective, adverb or","verb.","Non-terminal","て-form (*continuous)","(Don't cover)"];
 const え = [5,2,"Verb conjugation","If the previous card is Type 1,","next: auxiliary, noun, particle or","copula, and this card counts as a","noun. If the previous card is Type","5, next: え-stem auxiliary.","え-stem (*imperative)","Terminal.","(Don't cover)",false,0];
 
 const れる = [4,1,"Auxiliary","Next: noun or verb","conjugation.","Terminal.","あ-stem auxiliary. Type 1.","れる/られる (*receptive)","Lose 1 point.",true,-1];
 const る = [4,1,"Auxiliary","Next: noun or verb","conjugation.","Terminal.","え-stem auxiliary. Type 1.","る/られる (-able)","Gain 1 point.",true,1];
+
+const く = [2,1,"Adjective conjugation","Next: same as two cards ago.","Non-terminal","く-form (-ly)","(Don't cover)",false,0];
 
 const 最も = [2,1,"Adverb","Next: same as last card","Non-terminal. Initial","最も (mostly)","Gain 2 points.",true,2];
 const ゆっくり = [2,1,"Adverb","Next: same as last card","Non-terminal. Initial","ゆっくり (slowly)","Lose 1 point.",true,-1];
@@ -55,7 +123,8 @@ const です = [4,2,"Copula","Next: particle or た-form","verb conjugation.","T
 
 //Variables
 //---------
-var deckContents = [大人,一人,人工,下,大切,山,口,上る,正す,出る,立つ,生まれる,大きい,丸い,正しい,の,を,な,ね,に,あ,た,え,れる,る,最も,ゆっくり,だ,です];//Shuffled when program starts
+//var deckContents = [大人,一人,人工,下,大切,山,口,上る,正す,出る,立つ,生まれる,大きい,丸い,正しい,の,を,な,ね,に,あ,た,え,れる,る,最も,ゆっくり,だ,です];//Shuffled when program starts
+var deckContents = [大人,一人,人工,下,大きい,丸い,大きい,丸い,上る,正す,出る,立つ,生まれる,な,な,く,く,て,て,あ];
 var handContents = [];//filled from deckContents
 var playContents = [];//filled from handContents
 var canvasWidth = window.innerWidth;//full width of page
@@ -92,11 +161,12 @@ var cardHeld = false;
 var CARDX = [3, cardWidth + 6, 2 * cardWidth + 9, 3, cardWidth + 6, 2 * cardWidth + 9];
 var CARDY = [canvasHeight - (2 * cardHeight) - 6, canvasHeight - (2 * cardHeight) - 6, canvasHeight - (2 * cardHeight) - 6, canvasHeight - cardHeight - 3, canvasHeight - cardHeight - 3, canvasHeight - cardHeight - 3];
 for(let i = 0; i < 6; i ++) {
+    CARDX[i] = Math.floor(CARDX[i]);
     CARDY[i] = Math.floor(CARDY[i]);
 }//for
 
 //slots in play
-var PLAYX = [3, cardWidth + 6, 2 * cardWidth + 9];
+var PLAYX = [CARDX[0], CARDX[1], CARDX[2]];
 var PLAYY = Math.floor(buttonSize + 6);
 
 var cardX;//current locations of cards in hand
@@ -172,7 +242,7 @@ function drawCards() {
     playX = [];
     playY = [];
     playContents = [];
-    while(handContents.length < 6) {
+    while(handContents.length < 6 && deckContents.length > 0) {
         handContents[handContents.length] = deckContents[0];
         deckContents.splice(0,1);
     }//while
@@ -221,14 +291,14 @@ function paint() {
             for (let i = 0; i < playContents.length; i++) {
                 paintCard(playContents[i],i,false,false);
                 if(isSplitCard(playContents[i])) {
-                    context.clearRect(playX[i] + 1,playY[i] + (cardHeight / 2) - 5,cardWidth - 2,(cardHeight / 2) + 4);
+                    context.clearRect(playX[i] + 1,playY[i] + (cardHeight / 2) - 6,cardWidth - 2,(cardHeight / 2) + 4);
                 }//if
             }//for
         } else {
             for (let i = playContents.length - 1; i > playContents.length - 4 && i >= 0; i--) {
                 paintCard(playContents[i],i + 3 - playContents.length,false,false);
                 if(isSplitCard(playContents[i])) {
-                    context.clearRect(playX[i + 3 - playContents.length] + 1,playY[i + 3 - playContents.length] + (cardHeight / 2) - 5,cardWidth - 2,(cardHeight / 2) + 4);
+                    context.clearRect(playX[i + 3 - playContents.length] + 1,playY[i + 3 - playContents.length] + (cardHeight / 2) - 6,cardWidth - 2,(cardHeight / 2) + 4);
                 }//if
             }//for
         }//else
@@ -317,15 +387,13 @@ function touchEnd(ev) {
             playY[playY.length] = cardY[selection];
             for (let i = 0; i < playX.length; i ++) {
                 snapToPlay(i);
-            }
+            }//for
             handContents.splice(selection,1);
             cardX.splice(selection,1);
             cardY.splice(selection,1);
-            setTimeout(function() {
-                for(let i = 0; i < handContents.length; i++) {
-                    snapToHand(i);
-                }//for
-            },0);
+            for(let i = 0; i < handContents.length; i++) {
+                snapToHand(i);
+            }//for    
             paint();
         }//else
     } else if (selection == "hide") {
@@ -339,7 +407,7 @@ function touchEnd(ev) {
 }//releaseCard()
 
 //a released card flies back to its home position
-function snapToHand(card) {
+function snapToHand (card) {
     cardHeld = false;
     while(cardX[card] != CARDX[card] || cardY[card] != CARDY[card]) {
         if(cardX[card] > CARDX[card]) {
@@ -353,6 +421,7 @@ function snapToHand(card) {
             cardY[card] += 0.5;
         }//else if
         paint();
+        
     }//while
 }//snapToHand()
 
