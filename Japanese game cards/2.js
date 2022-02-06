@@ -78,6 +78,8 @@ Ideal
 **/
 
 //Cards
+/*
+
 //number of strings in top half of card (minus word type), number of strings in bottom half of card (minus card name), strings containing card content, true(split)/false(full), point value
 const 大人 = [4,1,"Noun","Next: noun, particle, adverb or","copula.","Terminal. Initial.","の-, な-noun.","大人 (adult)","Gain 2 points.",true,2];
 const 一人 = [3,1,"Noun","Next: noun, particle, adverb or","copula.","Terminal. Initial.","一人 (person alone)","Lose 1 point.",true,-1];
@@ -105,7 +107,7 @@ const ね = [2,2,"Particle","Terminal, provided the previous","card is terminal.
 const に = [3,4,"Particle","Next: noun, adjective, adverb or","verb.","Non-terminal.","に (*target marker)","Can only be played after a noun.","Nouns and adjectives","aren't terminal.","(Don't cover)",false,0];
 
 //const あ = [5,3,"Verb conjugation","If the previous card is Type 1,","next: auxiliary, noun, particle or","copula, and this card counts as a","noun. If the previous card is Type","5, next: あ-stem auxiliary.","あ-stem","Terminal, provided the previous","card is Type 1.","(Don't cover)",false,0];
-const あ = [3,2,"Verb conjugation","Next: noun, particle, adverb or","copula.","Can only be played after a Type 1 verb.","あ-stem","Terminal.","(Don't cover)",false,0];
+const あ = [4,2,"Verb conjugation","Next: noun, particle, adverb or","copula.","Can only be played after a Type 1","verb.","あ-stem","Terminal.","(Don't cover)",false,0];
 const た = [1,2,"Verb conjugation","Next: noun or particle","た-form (*past tense)","Terminal","(Don't cover)",false,0];
 const て = [3,1,"Verb conjugation","Next: noun, adjective, adverb or","verb.","Non-terminal","て-form (*continuous)","(Don't cover)"];
 const え = [5,2,"Verb conjugation","If the previous card is Type 1,","next: auxiliary, noun, particle or","copula, and this card counts as a","noun. If the previous card is Type","5, next: え-stem auxiliary.","え-stem (*imperative)","Terminal.","(Don't cover)",false,0];
@@ -119,12 +121,26 @@ const 最も = [2,1,"Adverb","Next: same as last card","Non-terminal. Initial","
 const ゆっくり = [2,1,"Adverb","Next: same as last card","Non-terminal. Initial","ゆっくり (slowly)","Lose 1 point.",true,-1];
 
 const だ = [5,3,"Copula","Next: particle, た- or て-form","verb conjugation.","Terminal, provided the previous","card is terminal.","Can't be played after an adjective.","だ (is/are/was/will be)","When played, gain 1 point.","Lose 2 points.","(Don't cover)",false,-2];
-const です = [4,2,"Copula","Next: particle or た-form","verb conjugation.","Terminal, provided the previous","card is terminal.","です (is/are/was/will be)","Lose 1 point.","(Don't cover)",false,-1];
+const です = [4,2,"Copula","Next: particle or た-form","verb conjugation.","Terminal, provided the previous","card is terminal.","です (is/are/was/will be)","Lose 1 point.","(Don't cover)",false,-1]; 
+*/
+
+const noun1 = [2,1,"A","Next: A or a","Terminal","","Gain 1 point",true,1];
+const adjective1 = [2,1,"B","Next: A or b","Terminal","","Gain 1 point",true,1];
+const verb1 = [2,1,"C","Next: A or c","Terminal","","Lose 1 point",true,-1];
+const particle1 = [2,1,"a","Next: A, B or C","Non-terminal","","Gain 1 point",false,1];
+const adConjugation1 = [2,1,"b","Next: A, B or C","Non-terminal","","Gain 2 points",false,2];
+const verbConjugation = [2,1,"c","Next: A, B or C","Non-terminal","","Gain 1 point",false,1];
+const noun2 = [2,1,"A","Next: A or a","Terminal","","Lose 2 points",true,-2];
+const adjective2 = [2,1,"B","Next: A or b","Terminal","","Lose 1 point",true,-1];
+const verb2 = [2,1,"C","Next: A or c","Terminal","","Gain 2 points",true,2];
+const particle2 = [2,1,"a","Next: A, B or C","Non-terminal","","Gain 2 points",false,2];
+const adConjugation2 = [2,1,"b","Next: A, B or C","Non-terminal","","Lose 4 points",false,-4];
 
 //Variables
 //---------
 //var deckContents = [大人,一人,人工,下,大切,山,口,上る,正す,出る,立つ,生まれる,大きい,丸い,正しい,の,を,な,ね,に,あ,た,え,れる,る,最も,ゆっくり,だ,です];//Shuffled when program starts
-var deckContents = [大人,一人,人工,下,大きい,丸い,大きい,丸い,上る,正す,出る,立つ,生まれる,な,な,く,く,て,て,あ];
+//var deckContents = [大人,一人,人工,下,大きい,丸い,大きい,丸い,上る,正す,出る,立つ,生まれる,な,な,く,く,て,て,あ];
+var deckContents = [noun1, noun1, noun1, noun2, noun2, adjective1, adjective1, adjective2, adjective2, verb1, verb1, verb1, verb2, particle1, particle1, particle2, adConjugation1, adConjugation1, adConjugation2, verbConjugation, verbConjugation, verbConjugation];
 var handContents = [];//filled from deckContents
 var playContents = [];//filled from handContents
 var canvasWidth = window.innerWidth;//full width of page
