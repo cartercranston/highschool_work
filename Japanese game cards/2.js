@@ -124,13 +124,13 @@ const だ = [5,3,"Copula","Next: particle, た- or て-form","verb conjugation."
 const です = [4,2,"Copula","Next: particle or た-form","verb conjugation.","Terminal, provided the previous","card is terminal.","です (is/are/was/will be)","Lose 1 point.","(Don't cover)",false,-1]; 
 */
 
-const noun1 = [2,1,"A","Next: A or a","Terminal","","Gain 1 point",true,1];
+const noun1 = [2,1,"A","Next: A or a","Non-terminal","","Gain 1 point",true,1];
 const adjective1 = [2,1,"B","Next: A or b","Terminal","","Gain 1 point",true,1];
 const verb1 = [2,1,"C","Next: A or c","Terminal","","Lose 1 point",true,-1];
 const particle1 = [2,1,"a","Next: A, B or C","Non-terminal","","Gain 1 point",false,1];
 const adConjugation1 = [2,1,"b","Next: A, B or C","Non-terminal","","Gain 2 points",false,2];
 const verbConjugation = [2,1,"c","Next: A, B or C","Non-terminal","","Gain 1 point",false,1];
-const noun2 = [2,1,"A","Next: A or a","Terminal","","Lose 2 points",true,-2];
+const noun2 = [2,1,"A","Next: A or a","Non-terminal","","Lose 2 points",true,-2];
 const adjective2 = [2,1,"B","Next: A or b","Terminal","","Lose 1 point",true,-1];
 const verb2 = [2,1,"C","Next: A or c","Terminal","","Gain 2 points",true,2];
 const particle2 = [2,1,"a","Next: A, B or C","Non-terminal","","Gain 2 points",false,2];
