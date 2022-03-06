@@ -125,16 +125,17 @@ const です = [4,2,"Copula","Next: particle or た-form","verb conjugation.","T
 */
 
 const noun1 = [2,1,"A","Next: A or a","Non-terminal","","Gain 1 point",true,1];
-const adjective1 = [2,1,"B","Next: A or b","Terminal","","Gain 1 point",true,1];
+const adjective1 = [2,1,"B","Next: A or b","Terminal","","Gain 2 point",true,2];
 const verb1 = [2,1,"C","Next: A or c","Terminal","","Lose 1 point",true,-1];
-const particle1 = [2,1,"a","Next: A, B or C","Non-terminal","","Gain 1 point",false,1];
-const adConjugation1 = [2,1,"b","Next: A, B or C","Non-terminal","","Gain 2 points",false,2];
-const verbConjugation = [2,1,"c","Next: A, B or C","Non-terminal","","Gain 1 point",false,1];
+const particle1 = [2,1,"a","Next: A, B or C","Non-terminal","","Gain 1 point",true,1];
+const adConjugation1 = [2,1,"b","Next: A, B or C","Non-terminal","","Gain 2 points",true,2];
+const verbConjugation = [2,1,"c","Next: A, B or C","Non-terminal","","Gain 2 point",true,2];
 const noun2 = [2,1,"A","Next: A or a","Non-terminal","","Lose 2 points",true,-2];
 const adjective2 = [2,1,"B","Next: A or b","Terminal","","Lose 1 point",true,-1];
 const verb2 = [2,1,"C","Next: A or c","Terminal","","Gain 2 points",true,2];
-const particle2 = [2,1,"a","Next: A, B or C","Non-terminal","","Gain 2 points",false,2];
-const adConjugation2 = [2,1,"b","Next: A, B or C","Non-terminal","","Lose 4 points",false,-4];
+const particle2 = [2,1,"a","Next: A, B or C","Non-terminal","","Gain 2 points",true,2];
+const adConjugation2 = [2,1,"b","Next: A, B or C","Non-terminal","","Lose 4 points",true,-4];
+const soldCard = [2,1,"?","Next: ?","?","","Lose ? points",false,0];
 
 //Variables
 //---------
@@ -390,7 +391,9 @@ function dragCard(ev) {
 //calls whenever the user removes a finger from the screen
 function touchEnd(ev) {
     if (Number.isInteger(selection)) {
-        if (cardY[selection] > CARDY[0] - cardHeight / 1.2) {
+        if (cardY[selection] + cardHeight > canvasHeight * 3/4) {
+            sellCard(selection);//if the card is low enough, it gets sold
+        } else if (cardY[selection] > CARDY[0] - cardHeight / 1.2) {
             snapToHand(selection);//if the card stays in your hand, it returns to its position
         } else {
             //move selection to playContents, playX and playY
@@ -437,7 +440,6 @@ function snapToHand (card) {
             cardY[card] += 0.5;
         }//else if
         paint();
-        
     }//while
 }//snapToHand()
 
@@ -458,6 +460,21 @@ function snapToPlay(index) {
         paint();
     }//while
 }//snapToPlay()
+
+//a sold card is removed from the game, and a blank card is placed on top of the deck
+function sellCard(selection) {
+    //remove sold card from game
+    handContents.splice(selection,1);
+    cardX.splice(selection,1);
+    cardY.splice(selection,1);
+    for(let i = 0; i < handContents.length; i++) {
+        snapToHand(i);
+    }//for
+    
+    // put a blank card on top of deck
+    deckContents.unshift(soldCard);
+    paint();
+}//sellCard()
 
 //returns whether the card has hidden information
 function isSplitCard(card) {
@@ -564,8 +581,10 @@ function paintCard (card,index,inHand,held) {
     
     context.fillStyle = "#000000";
     context.fillRect(x,y,width,height);
-    if (held && cardY[index] <= CARDY[0] - cardHeight / 1.2) {
+    if (held && y <= CARDY[0] - cardHeight / 1.2) {
         context.fillStyle = "#ddffdd";
+    } else if (held && y + cardHeight >= canvasHeight * 3/4) {
+        context.fillStyle = "#ffdddd";
     } else {
         context.fillStyle = "#ffffff";
     }
