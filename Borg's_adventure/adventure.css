@@ -1,0 +1,188 @@
+/*
+59ec00 = green
+48444c = grey
+c05e49 = orange-red
+d664be = hot pink
+b9e6ff = light blue
+f5cda7 = pale orange
+bdc2bf = light grey
+*/
+
+body {
+	background-image: url("images/night.jpg");
+    background-size:108vh;
+    color:#59ec00;
+    font-family: Verdana, sans-serif;
+}
+
+.gameboard {
+	border: 1px solid black;
+	justify-content:center;
+	width:600px;
+	height:600px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#gameboard {
+	position:absolute;
+    top:140px;
+	display:grid;
+	grid-template-columns:60px 60px 60px 60px 60px 60px 60px 60px 60px 60px;
+	grid-template-rows:60px 60px 60px 60px 60px 60px 60px 60px 60px 60px;
+}
+
+#outline {
+    position:relative;
+    left: -60px;
+    width:720px;
+    height:720px;
+	background-image:url("images/asteroid-belt.png");
+    background-color: #00000070;
+}
+
+.planet {
+	background-image:url("images/planet.png");
+}
+.planet2 {
+	background-image:url("images/planet2.png");
+}
+.planet3 {
+    background-image:url("images/planet3.png");
+}
+.planet4 {
+    background-image:url("images/planet.png");
+}
+.obstacle1 {
+	background-image:url("images/obstacle1.png");
+}
+.flag {
+	background-image:url("images/cube.png");
+}
+.forcefieldup {
+	background-image:url("images/forcefieldup.png");
+}
+.forcefieldside {
+	background-image:url("images/forcefieldside.png");
+}
+.enemyup {
+	background-image:url("images/enemyup.png");
+}
+.enemyright {
+	background-image:url("images/enemyright.png");
+}
+.enemydown {
+	background-image:url("images/enemydown.png");
+}
+.enemyleft {
+	background-image:url("images/enemyleft.png");
+}
+.charge1enemyup {
+	background-image:url("images/charge1enemyup.png");
+}
+.charge1enemyright {
+	background-image:url("images/charge1enemyright.png");
+}
+.charge1enemydown {
+	background-image:url("images/charge1enemydown.png");
+}
+.charge1enemyleft {
+	background-image:url("images/charge1enemyleft.png");
+}
+.charge2enemyup {
+	background-image:url("images/charge2enemyup.png");
+}
+.charge2enemyright {
+	background-image:url("images/charge2enemyright.png");
+}
+.charge2enemydown {
+	background-image:url("images/charge2enemydown.png");
+}
+.charge2enemyleft {
+	background-image:url("images/charge2enemyleft.png");
+}
+.sphereup {
+	background-image:url("images/sphereup.png");
+}
+.sphereright {
+	background-image:url("images/sphereright.png");
+}
+.spheredown {
+	background-image:url("images/spheredown.png");
+}
+.sphereleft {
+	background-image:url("images/sphereleft.png");
+}
+.flagandsphere {
+	background-image:url("images/cubeandsphere.png");
+}
+.torpedo0 {
+	background-image:url("images/torpedowhite.jpg");
+}
+.torpedo1 {
+	background-image:url("images/torpedopurple.jpg");
+}
+.torpedo2 {
+	background-image:url("images/torpedored.jpg");
+}
+
+
+.message {
+    display:none;
+    position:absolute;
+    top:80px;
+    margin-left:-60px;
+    width:720px;
+    height:720px;
+    text-align: center;
+}
+
+#lose {
+    background-color: #c05e49;
+    font-size: 6em;
+    color:white;
+}
+
+#levelup {
+    background-color:#b9e6ff;
+    color:#bdc2bf;
+    font-size:4em;
+    text-align: center;
+    line-height: 40vh;
+}
+h1 {
+	text-align:center;
+	color:#d664be;
+}
+a {
+	font-size:2em;
+    color:#59ec00;
+    text-decoration: none;
+}
+a:visited {
+    color:#bdc2bf
+}
+a:active {
+    color:#f5cda7;
+}
+div {
+	text-align:center;
+}
+img {
+	padding-left:50px;
+}
+p {
+    display: inline-block;
+	color:#59ec00;
+    background-color: #00517Dee;
+}
+button {
+    border: none;
+    color:#59ec00;
+    background-color:#d664be30;
+    font-size:0.35em;
+}
+button:hover {
+    background-color: #59ec00;
+    color:#48444c;
+}
